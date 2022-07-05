@@ -25,15 +25,18 @@ class AuthMethods {
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
 
-        //String photoUrl = await StorageMethod();
+        // String photoUrl = await StorageMethods()
+        //     .uploadImageToStorage('profilePics', file, false);
+
         // add user to firestore
-        _firestore.collection('users').doc(cred.user!.uid).set({
+        await _firestore.collection('users').doc(cred.user!.uid).set({
           'username': username,
           'uid': cred.user!.uid,
           'email': email,
           'bio': bio,
           'followers': [],
           'following': [],
+          //'photoUrl': photoUrl,
         });
         //
         // await _firestore.collection('users').add({
@@ -47,6 +50,26 @@ class AuthMethods {
 
         res = "success";
       }
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
+  }
+
+  Future<String> loginUser(
+      {required String email, required String password}) async {
+    String res = "Some error occurred";
+    try {
+      if (email.isNotEmpty || password.isNotEmpty) {
+        await _auth.signInWithEmailAndPassword(
+            email: email, password: password);
+        res = "success";
+      } else {
+        res = "Pleas enter all the fields";
+      }
+    } on FirebaseAuthException catch (err) {
+      if (err.code == 'user-not-found') {
+      } else if (err.code == 'wrong-password') {}
     } catch (err) {
       res = err.toString();
     }

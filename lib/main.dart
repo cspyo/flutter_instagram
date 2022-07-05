@@ -13,7 +13,7 @@ void main() async {
             appId: "1:96962124433:web:b392208323e55383303d30",
             messagingSenderId: "96962124433",
             projectId: "flutter-instagrm-3a865",
-            storageBucket: "flutter-instagrm-3a865.appspot.com"));
+            storageBucket: "flutter-instagrm-3a865.appspot.com/"));
   } else {
     await Firebase.initializeApp();
   }
